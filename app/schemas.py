@@ -8,11 +8,14 @@ class PostCreate(BaseModel):
 
 class PostResponse(BaseModel):
     id: uuid.UUID
+    user_id: str
     caption: str
     url: str
     file_type: str
     file_name: str
     created_at: str
+    is_owner: bool
+    email: str
 
 class UserRead(schemas.BaseUser[uuid.UUID]):
     pass
