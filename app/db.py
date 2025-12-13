@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sess
 from sqlalchemy.orm import DeclarativeBase, relationship
 from datetime import datetime
 from fastapi_users.db import SQLAlchemyUserDatabase, SQLAlchemyBaseUserTableUUID
-from fastapi import Depends
+from fastapi import Depends 
 
 DATABASE_URL = "sqlite+aiosqlite:///./test_v3.db"
 

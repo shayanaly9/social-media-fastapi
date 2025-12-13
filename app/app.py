@@ -10,6 +10,7 @@ import shutil
 import os
 import uuid
 import tempfile
+from app.users import auth_backend, current_active_user, fastapi_users
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -17,6 +18,8 @@ async def lifespan(app: FastAPI):
     yield
     
 app = FastAPI(lifespan = lifespan)
+
+app.include_router(fastapi_users.get_auth_router(auth_backend),prefix="/auth",tags=["auth"])
 
 @app.post("/upload")
 async def upload_file(
@@ -85,3 +88,19 @@ async def get_feed(
             created_at = post.created_at.isoformat()
         ))
     return {"posts": post_data}
+
+@app.delete("/post/{post_id}")
+async def delete_post(
+        post_id: uuid.UUID,
+        session: AsyncSession = Depends(get_async_session)
+):
+    try:
+        result = await session.execute(select(Post).where(Post.id == post_id))
+        post = result.scalars().first()
+        if not post:
+            raise HTTPException(status_code=404, detail="Post not found")
+        await session.delete(post)
+        await session.commit()
+        return {"success": True, "message": "Post deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
