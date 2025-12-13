@@ -62,11 +62,14 @@ async def upload_file(
         await session.refresh(post)
         return PostResponse(
             id = post.id,
+            user_id = str(post.user_id),
             caption = post.caption,
             url = post.url,
             file_type = post.file_type,
             file_name = post.file_name,
-            created_at = post.created_at.isoformat()
+            created_at = post.created_at.isoformat(),
+            is_owner = True,
+            email = user.email
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
