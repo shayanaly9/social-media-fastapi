@@ -1,103 +1,100 @@
-# FastAPI Social Media Feed
+# Simple Social
 
-A high-performance social media feed application built with FastAPI, SQLAlchemy, and SQLite.
+**Simple Social** is a modern, full-stack social media application built with **FastAPI** and **Streamlit**. It features a high-end, animated user interface, secure authentication, and real-time media sharing capabilities.
 
-## Features
+![Simple Social Banner](https://via.placeholder.com/1200x400?text=Simple+Social+Preview) 
+*(Note: Replace with an actual screenshot of your animated homepage)*
 
-- **Feed API**: Retrieve a paginated list of posts sorted by creation date.
-- **Upload API**: Upload images with captions (currently stores metadata in DB).
-- **Database**: SQLite database using `aiosqlite` for asynchronous operations.
-- **ORM**: SQLAlchemy for robust database interactions.
-- **Image Processing**: Integration with ImageKit (setup included).
+## ✨ Features
 
-## Tech Stack
+- **Modern & Fluid UI**: Custom-designed frontend with a sophisticated, liquid-like animated gradient background and glassmorphism effects.
+- **Secure Authentication**: Robust JWT-based system for User Registration, Login, and Session Management using `fastapi-users`.
+- **Media Sharing**: Upload and share images and short videos seamlessly.
+- **Cloud Storage Integration**: Optimized media handling and delivery via **ImageKit.io**.
+- **Interactive Feed**: Real-time social feed with caption overlays and owner-specific controls (delete functionality).
+- **Responsive Design**: Mobile-friendly layout adapted for various screen sizes.
 
-- **Framework**: [FastAPI](https://fastapi.tiangolo.com/)
-- **Database**: SQLite (Async)
-- **ORM**: [SQLAlchemy](https://www.sqlalchemy.org/)
-- **Schema Validation**: [Pydantic](https://docs.pydantic.dev/)
-- **Image Service**: [ImageKit](https://imagekit.io/)
+## 🛠️ Tech Stack
 
-## Project Structure
+### Backend
+- **Framework**: [FastAPI](https://fastapi.tiangolo.com/) (Python)
+- **Database**: SQLite with SQLAlchemy (AsyncIO)
+- **Authentication**: `fastapi-users`
+- **Media Storage**: `imagekitio`
+
+### Frontend
+- **Framework**: [Streamlit](https://streamlit.io/)
+- **Styling**: Custom CSS3 Animations, Flexbox grid
+- **Communication**: `requests` for REST API consumption
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Python 3.9+
+- An ImageKit.io account (for media storage)
+
+### Installation
+
+1.  **Clone the repository:**
+    ```bash
+    git clone <your-repo-url>
+    cd <your-project-folder>
+    ```
+
+2.  **Create and activate a virtual environment:**
+    ```bash
+    python -m venv venv
+    # Windows
+    venv\Scripts\activate
+    # macOS/Linux
+    source venv/bin/activate
+    ```
+
+3.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+    *Note: Ensure `streamlit`, `requests`, `fastapi`, `uvicorn`, `sqlalchemy`, `fastapi-users`, `imagekitio` are installed.*
+
+4.  **Configuration:**
+    Create a `.env` file or configure your secrets in `app/users.py` and `app/app.py`.
+    *Important: Update the ImageKit credentials in `app/app.py` with your own keys.*
+
+### Running the Application
+
+You need to run both the Backend and Frontend servers.
+
+**1. Start the Backend API:**
+Open a terminal and run:
+```bash
+python main.py
+```
+*The API will start at `http://localhost:8000`*
+
+**2. Start the Frontend UI:**
+Open a second terminal and run:
+```bash
+python -m streamlit run app/frontend.py
+```
+*The App will open in your browser at `http://localhost:8501`*
+
+## 📂 Project Structure
 
 ```
-.
-├── app
-│   ├── app.py          # Main application application and endpoints
-│   ├── db.py           # Database configuration and models
-│   ├── schemas.py      # Pydantic schemas for request/response
-│   └── image.py        # ImageKit configuration
-├── main.py             # Entry point to run the server
-├── seed_data.py        # Script to populate database with sample data
-└── pyproject.toml      # Project dependencies
+├── app/
+│   ├── app.py          # Main FastAPI application and endpoints
+│   ├── db.py           # Database models and session configuration
+│   ├── frontend.py     # Streamlit frontend application
+│   ├── schemas.py      # Pydantic models for data validation
+│   └── users.py        # User management and authentication logic
+├── main.py             # Entry point for the backend server
+├── pyproject.toml      # Project dependencies and configuration
+└── README.md           # Project documentation
 ```
 
-## Installation
+## 🛡️ License
 
-1.  **Clone the repository**:
-    ```bash
-    git clone <repository-url>
-    cd <repository-directory>
-    ```
+This project is open-source and available under the [MIT License](LICENSE).
 
-2.  **Install dependencies**:
-    Make sure you have Python installed.
-    ```bash
-    pip install fastapi uvicorn[standard] sqlalchemy aiosqlite pydantic imagekitio python-dotenv
-    ```
-
-3.  **Environment Setup**:
-    Create a `.env` file in the root directory with your ImageKit credentials:
-    ```env
-    IMAGEKIT_PUBLIC_KEY=your_public_key
-    IMAGEKIT_PRIVATE_KEY=your_private_key
-    IMAGEKIT_URL=your_url_endpoint
-    ```
-
-## Usage
-
-1.  **Run the Server**:
-    ```bash
-    python main.py
-    ```
-    The server will start at `http://0.0.0.0:8000`.
-
-2.  **Seed Data** (Optional):
-    Populate the database with a sample post:
-    ```bash
-    python seed_data.py
-    ```
-
-3.  **API Documentation**:
-    Open your browser and navigate to `http://localhost:8000/docs` to view the interactive Swagger UI.
-
-## Endpoints
-
-### `GET /feed`
-Returns a list of posts.
-
-**Response:**
-```json
-{
-  "posts": [
-    {
-      "id": "uuid",
-      "caption": "string",
-      "url": "string",
-      "file_type": "string",
-      "file_name": "string",
-      "created_at": "timestamp"
-    }
-  ]
-}
-```
-
-### `POST /upload`
-Upload a file with a caption.
-
-**Request:**
-- `file`: File object
-- `caption`: String
-
-**Response:**
-Returns the created post object.
+---
+**Developed with ❤️ by [Your Name]**

@@ -10,6 +10,8 @@ if 'token' not in st.session_state:
     st.session_state.token = None
 if 'user' not in st.session_state:
     st.session_state.user = None
+if 'page' not in st.session_state:
+    st.session_state.page = 'landing'
 
 
 def get_headers():
@@ -18,6 +20,93 @@ def get_headers():
         return {"Authorization": f"Bearer {st.session_state.token}"}
     return {}
 
+def landing_page():
+    # Modern styling with Animated Background
+    st.markdown("""
+    <style>
+    /* Animated Gradient Background */
+    .stApp {
+        background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #2E1A47, #3b8d99, #F59E0B);
+        background-size: 400% 400%;
+        animation: gradient 20s ease infinite;
+        background-attachment: fixed;
+    }
+    
+    @keyframes gradient {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    .hero {
+        padding: 5rem 1rem;
+        text-align: center;
+        border-radius: 15px;
+        margin-top: 2rem;
+    }
+    .hero h1 {
+        font-size: 4rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        background: -webkit-linear-gradient(left, #fff, #bbb);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+        font-size: 1.5rem;
+        color: #ddd;
+        margin-bottom: 2rem;
+        font-weight: 300;
+        letter-spacing: 0.5px;
+    }
+    
+    /* Navbar text */
+    h3 {
+        color: white !important;
+        font-weight: 600;
+    }
+
+    /* Button Styling */
+    .stButton button {
+        border-radius: 50px;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+        font-weight: 600;
+        background-color: #F59E0B;
+        color: white;
+        border: none;
+        transition: all 0.3s ease;
+    }
+    .stButton button:hover {
+        background-color: #D97706;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    # Navbar
+    col1, col2 = st.columns([4, 1])
+    with col1:
+        st.markdown("### Simple Social")
+    with col2:
+        if st.button("Get Started", type="primary"):
+            st.session_state.page = 'login'
+            st.rerun()
+
+    # Hero Section
+    st.markdown("""
+    <div class="hero">
+        <h1>Connect. Share. Inspire.</h1>
+        <p>A simple, modern social platform built for you.</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 def login_page():
     st.title("Welcome to Simple Social")
@@ -167,7 +256,10 @@ def feed_page():
 
 # Main app logic
 if st.session_state.user is None:
-    login_page()
+    if st.session_state.page == 'landing':
+        landing_page()
+    else:
+        login_page()
 else:
     # Sidebar navigation
     st.sidebar.title(f"Hi {st.session_state.user['email']}!")
