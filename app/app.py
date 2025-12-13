@@ -10,7 +10,7 @@ import shutil
 import os
 import uuid
 import tempfile
-from app.users import auth_backend, current_active_user, fastapi_users
+from app.users import auth_backend, current_active_user, fastapi_users, current_active_user_optional
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -78,7 +78,7 @@ async def upload_file(
 @app.get("/feed")
 async def get_feed(
         session: AsyncSession = Depends(get_async_session),
-        user: User = Depends(current_active_user)
+        user: User = Depends(current_active_user_optional)
 ):
     result = await session.execute(select(Post).order_by(Post.created_at.desc()))
     posts = result.scalars().all()
@@ -97,7 +97,7 @@ async def get_feed(
             file_type=post.file_type,
             file_name=post.file_name,
             created_at=post.created_at.isoformat(),
-            is_owner=post.user_id == user.id,
+            is_owner=post.user_id == user.id if user else False,
             email=users_dict.get(post.user_id, "Unknown")
         ))
     return {"posts": post_data}
@@ -106,8 +106,10 @@ async def get_feed(
 async def delete_post(
         post_id: uuid.UUID,
         session: AsyncSession = Depends(get_async_session),
-        user: User = Depends(current_active_user)
+        user: User = Depends(current_active_user_optional)
 ):
+    if not user:
+        raise HTTPException(status_code=401, detail="You are not authorized to delete this post")
     try:
         result = await session.execute(select(Post).where(Post.id == post_id))
         post = result.scalars().first()
